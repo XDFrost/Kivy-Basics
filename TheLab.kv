@@ -1,0 +1,300 @@
+CanvasEx7:
+
+
+#: set s dp(150)                                              # "#: 'variable name' 'variable value' " - Syntax to add variable name
+
+
+<CanvasEx1>:                                                  # canvas is used to give the graphical instructions; canvas can be added inside any widget   
+    canvas:
+        Rectangle:
+            pos: self.center_x-s/2, self.center_y-s/2         # s/2 is done to subtract half of width and height of rectangle to get it into the centre
+            # pos: self.center                                # self.center - Give the centre position to lower left point of the rectangle
+            # pos: dp(100), dp(150)
+            size: s, s                                        # s - Defined variable
+        Ellipse:
+            pos: 200, 500
+            size: s, s/2
+        Line:
+            # points: (0, 0, 100, 100, 200, 0)
+            points: (0, 0, self.width/4, 100, self.width/2, 0, self.width*3/4, 100, self.width, 0)                 # points: (tuple of points) i.e. (x, y, x2, y2, ....) where x, y define one point and x2, y2 define the other; more than 2 points can be added; self.width is the width of window
+            width: 2                                          # Changes the width of the line
+
+
+
+<CanvasEx2>:
+    canvas:
+        Line:
+            points: (self.width/2, 0, self.width/2, self.height)             # width - for x axis; height - for y axis; self.width - width of window; self.height - height of window
+            width: 2
+        Line:
+            points: (0, self.height/2, self.width, self.height/2)
+            width: 2
+
+
+
+<CanvasEx3>:
+    canvas:
+        Color:                                                # Will give boundary color to all mentioned parameters; if color parameter is used after a graphical instruction (let it be circle), previous graphical instruction (circle) won't have a color; two or more color instructions can be used; only the color of graphical instructions used after color parameter will change; color is a global() property
+            rgba: 1, 0, 0, .3                                 # r - red, g - green, b - blue, a - alpha
+        Line:
+            circle: (200, 200, 100)                           # Circle is a tuple; syntax - (centre_x, centre_y, radius)
+            width: 2
+        Line:
+            ellipse: (500, 300, 100, 200)                     # ellipse is a tuple; syntax - (centre_x, centre_y, radius_x, radius_y)
+            width: 2
+        Color:
+            rgba: 0, 0, 1, .3
+        Line:
+            rectangle: (400, 50, 300, 200)                    # rectangle is a tuple; syntax - (centre_x, centre_y, width, height)
+            width: 2
+
+
+
+<CanvasEx4>:
+    Button:
+        pos: (100, 400)
+        text: "A"
+        on_press: root.button_click()
+
+
+
+<CanvasEx6>:                                                  # Since button is a widget, we can add canvas; .before moves the instructions of canvas before button; .after moves the instructions after given widget; canvas always draws at 0,0 position with exception of relative layout
+    BoxLayout:                                                # has default size of 100, 100 because canvasex6 is widget not a layout
+        size: root.size                                       # root.size will force the BoxLayout to ocuppy the window fully
+        Widget:
+            canvas:
+                Color:
+                    rgb: 0, 1, 0
+                Rectangle:
+                    size: self.size                           # self.size is the size of the widget, whereas root.size is the size of the window
+        RelativeLayout:                                       # There is no need to use self.pos with RelativeLayout because RelativeLayout will move canvas to it's position
+            canvas:
+                Color:
+                    rgb: 0, 0, 1
+                Rectangle:
+                    size: self.size
+        
+        # Widget:                                               # WITHOUT self.pos - this widget will make a blue rectangle at left 0,0 because canvas always starts at 0,0; we need to give self.pos to get another color rectangle at right
+            # canvas:
+            #     Color:
+            #         rgb: 0, 0, 1
+            #     Rectangle:
+            #         size: self.size
+            #         pos: self.pos
+
+        # Button:
+        #     text: "B"
+
+    # RelativeLayout:
+    #     canvas:
+    #         Rectangle:
+    #     pos: 100, 100
+
+    # Button:
+    #     canvas.before:
+    #         Rectangle:
+    #     text: "A"
+    #     pos: 100, 100
+
+
+
+<canvasEx7>:
+    BoxLayout:
+        RelativeLayout:
+            canvas:
+                Color:
+                    rgb: 0, 0, 1
+                Rectangle:
+                    size: self.size
+        RelativeLayout:
+            canvas:
+                Color:
+                    rgb: 1, 1, 1
+                Rectangle:
+                    size: self.size
+        RelativeLayout:
+            canvas:
+                Color:
+                    rgb: 1, 0, 0
+                Rectangle:
+                    size: self.size
+        
+
+<ImageEx@GridLayout>:
+    cols: 3
+    Image:                                                    # Default syntax to import images
+        source: "images/cake.jpg"                             # source: "..." - Give the designated area from where image is imported
+    Image:
+        source: "images/cake.jpg"
+        allow_stretch: True                                   # allow_stretch will allow the image to change it's aspect ratio with respect to the window
+    Image:
+        source: "images/cake.jpg"
+        keep_ratio: False                                     # True by default; Means aspect ratio can change; Can only be used with allow_stretch; Image will take all the relative space; jpg file can't have transparency but can compress better than png
+        allow_stretch: True
+
+
+
+<WidgetsEx>:
+    cols: 3
+    ToggleButton:                                             # Adds a toggle button
+        text: "OFF"                                           # Initial Text of ToggleButton
+        on_state: root.toogle_button_state(self)              # on_state will call the assigned function(toogle_button_state) when toggle button is pressed; on_state is Built-in function; Will pass ToogleButton in self arguement in function; self is ToggleButton itself
+        size_hint: None, 1
+        width: "100dp"
+    Button:
+        text: "Click Here"
+        on_press: root.on_button_click()                      # on_press will do the assigned function when the button is pressed;  root is used because it induces the change in class(WidgetsEx) but self only induces the change in button; on_press is Built-in function
+        disabled: not root.count_enabled                      # disabled will disable the use of button i.e. we can't press the button; not will reverse the function of disable with respect to given function(count_enabled in this case)
+    Label:
+        text: root.my_text                                    # Label is using the contents of my_text property
+        font_name: "fonts/Lcd.ttf"                            # fonts/Lcd.ttf - folder/font name
+        font_size: "70dp"
+        color: .1, .7, .5, 1                                  # color, color, color, visibility
+    Switch:
+        id: my_switch
+        on_active: root.switch_button_activity(self)          # on_active will do the assigned function given to the function; on_active is a Built-in function; self is switch itself
+        size_hint: None, 1
+        width: "100dp"
+        active: True                                          # Switch will be on by default
+    Slider:
+        id: my_slider                                         # id makes it possible to use a variable in kv file; my_slider is a variable
+        min: 0
+        max: 100
+        value: 50                                             # value marks the position of the slider between min and max vlaue
+        orientation: "vertical"
+        disabled: not my_switch.active                        # disabled: my_switch.active - if switch is active, my_switch.active is true and hence disabled is true, so slider will be disabled and therefore not is used
+        # on_value: root.slider_value(self)                   # on_value is Built-in functin for the slider
+    BoxLayout:                                                # will stack both label and the progress bar
+        orientation: "vertical"
+        Label:
+            # text: root.slider_value_txt
+            text: str(int(my_slider.value))                   # .value takes the slider value from my_slider and displays it in the label
+        ProgressBar:
+            max: 100
+            value: my_slider.value                            # ProgressBar will display the value of slider
+    TextInput:                                                # User can input some text here
+        id: my_input
+        size_hint: None, 1
+        width: "100dp"
+        text: "Hi!"                                           # Default text
+        multiline: False                                      # Text can only be written in one line, can't be changed after enter is pressed; multiline is true by default    
+        on_text_validate: root.on_text_validate(self)         # on_text_validate will update the label only when enter is pressed
+    Label:
+        # text: my_input.text                                 # Will display the text of TextInput; .text is syntax; will automatically update if we'll write text in TextInput
+        text: "Your name is: " + root.text_input              # We can add a string in Label
+
+
+
+<PageLayoutEx@PageLayout>:                                    # Displays different layouts in the form of a book i.e. from one page to another
+    MainWidget
+    BoxLayoutEx
+    AnchorLayoutEx
+    GridLayoutEx
+
+
+
+<ScrollviewEx@ScrollView>:                                    # ScrollView layout only takes one argument into consideration, here it is StackLayoutEx
+    StackLayoutEx:
+        size_hint: 1, None
+        height: self.minimum_height                           # self.minimum_height will let you scroll to the exact number of items neither less nor more
+
+
+
+<StackLayoutEx>:                                              # Stacks items on multiple lines and can be of different size
+    # orientation: "lr-bt"                                    # Orientation changes the placement of buttons; l=LEFT, r=RIGHT, t=TOP, b=BOTTOM
+    # padding: ("20dp", "20dp", "20dp", "20dp")               # Gives the space between window border and the button; format: LEFT, RIGHT, TOP, BOTTOM
+    # spacing: "20dp", "20dp"                                 # Gives the space between the buttons; format: HORIZONTALLY, VERTICALLY
+
+    # Button:
+        # text: "A"
+        # size_hint: 0.2, 0.2
+    # Button:
+        # text: "B"
+        # size_hint: 0.2, 0.2
+    # Button:
+        # text: "C"
+        # size_hint: 0.2, 0.2
+    # Button:
+        # text: "D"
+        # size_hint: 0.2, 0.2
+    # Button:
+        # text: "E"
+        # size_hint: 0.2, 0.2
+    # Button:
+        # text: "F"
+        # size_hint: 0.2, 0.2
+
+
+
+<GridLayoutEx@GridLayout>:                                # Decorator is used because I do not want to write code in python file
+    # cols: 3                                             # Needs a property, either it be ROWS(rows) or COLUMNS(cols)
+    rows: 2
+    Button:
+        text: "A"
+        # size_hint: 0.5,1                                # Using size_hint will change the button size but will not be fixed when expanding or collapsing the window
+        size_hint: None,1
+        width: "60dp"                                     # In order to fix the button size, use width/height with size_hint
+    BoxLayoutEx:                                          # To incorporate two or more layouts, we need to write the variable containing a layout code in the code of other layout
+    Button:
+        text: "C"
+    Button:
+        text: "D"
+        size_hint: None,1
+        width: "60dp"
+    Button:
+        text: "E"
+    Button:
+        text: "F"
+
+
+
+<AnchorLayoutEx>:
+    anchor_x: "center"
+    anchor_y: "top"
+    BoxLayout:
+        size_hint: 0.2,0.2
+        Button:
+            text: "A"
+        Button:
+            text: "B"
+
+
+
+<BoxLayoutEx>:
+    orientation: "horizontal"
+    Button:
+        text: "A"
+              # size: "40dp", "40dp"
+        size_hint: 0.5, 0.5
+              # width: '100dp'
+              # height: '60dp'
+              # x, center_x, right
+              # y, center_y, top
+        pos_hint: {"center_y": 0.5}
+    BoxLayout:
+        orientation: "vertical"
+        spacing: "20dp"
+        Button:
+            text: "B1"
+        Button:
+            text: "B2"
+        Button:
+            text: "B3"
+        Button:
+            text: "B4"
+    Button:
+        text: "C"
+
+
+
+<MainWidget>:
+    Button:
+        text: "Hello"
+        size: "100dp", "80dp"
+        pos: '100dp', '200dp'
+        color: 0,1,0,1
+    Label:
+        text: "Hello2"
+        size: "100 dp", "80dp"
+        pos: '300dp', '200dp'
+        color: 0,0.8,0.69,1
